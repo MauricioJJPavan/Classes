@@ -9,15 +9,23 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 class ClsFuncionario:
     
     # Construtor da classe para inicializar os atributos
-    def __init__(self, nome, salario, cargo):
+    def __init__(self, nome, cargo, salario):
         self.nome = nome
-        self.salario = salario
         self.cargo = cargo
+        self.salario = salario
 
     # Método para imprimir informações sobre o funcionário com índice
     def mostrar_informacoes_com_indice(self, indice):
         salario_formatado = locale.currency(self.salario, grouping=True)
         print(f"Índice {indice}: Funcionário(a) {self.nome} tem salário de {salario_formatado} e o cargo é {self.cargo}")
+
+    # Método para atualizar o salário do funcionário
+    def atualizar_salario(self, novo_salario):
+        self.salario = novo_salario
+
+    # Método para atualizar o cargo do funcionário
+    def atualizar_cargo(self, novo_cargo):
+        self.cargo = novo_cargo
 
 # Lista para armazenar os objetos ClsFuncionario
 lst_funcionarios = []
@@ -37,7 +45,7 @@ with open('csv_func.csv', newline='', encoding='utf-8') as csv_file:
         salario = float(salario)
         
         # Criando um objeto da classe ClsFuncionario com base nos valores e adicionando à lista
-        funcionario = ClsFuncionario(nome, salario, cargo)
+        funcionario = ClsFuncionario(nome, cargo, salario)
         lst_funcionarios.append(funcionario)
 
 # Função para obter informações de um funcionário com base no índice inserido pelo usuário
@@ -101,132 +109,40 @@ for indice, funcionario in enumerate(top_10_menores_salarios):
     indice += 1
     funcionario.mostrar_informacoes_com_indice(indice)
 
-
-
-
-# Função para verificar se o funcionário no índice especificado tem o atributo "nome"
-def verificar_atributo_nome(indice):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        if hasattr(funcionario_desejado, "nome"):
-            print(f"Funcionário no índice {indice} tem o atributo 'nome'.")
-        else:
-            print(f"Funcionário no índice {indice} não tem o atributo 'nome'.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Função para verificar se o funcionário no índice especificado tem o atributo "salario"
-def verificar_atributo_salario(indice):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        if hasattr(funcionario_desejado, "salario"):
-            print(f"Funcionário no índice {indice} tem o atributo 'salario'.")
-        else:
-            print(f"Funcionário no índice {indice} não tem o atributo 'salario'.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Função para definir o atributo "salario" do funcionário no índice especificado
-def definir_atributo_salario(indice, novo_salario):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        setattr(funcionario_desejado, "salario", novo_salario)
-        print(f"Salário do funcionário no índice {indice} foi definido como {novo_salario}.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Função para verificar o valor do atributo "salario" do funcionário no índice especificado
-def verificar_valor_atributo_salario(indice):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        salario = getattr(funcionario_desejado, "salario", None)
-        if salario is not None:
-            print(f"Salário do funcionário no índice {indice} é {salario}.")
-        else:
-            print(f"Funcionário no índice {indice} não tem o atributo 'salario'.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Função para excluir o atributo "salario" do funcionário no índice especificado
-def excluir_atributo_salario(indice):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        if hasattr(funcionario_desejado, "salario"):
-            delattr(funcionario_desejado, "salario")
-            print(f"Atributo 'salario' do funcionário no índice {indice} foi excluído.")
-        else:
-            print(f"Funcionário no índice {indice} não tem o atributo 'salario'.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Função para exibir os dados completos do funcionário
-def exibir_dados_completos(indice):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        funcionario_desejado.mostrar_informacoes_com_indice(indice)
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Função para exibir os dados completos do funcionário
-def exibir_dados_completos(indice):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        if hasattr(funcionario_desejado, "salario"):
-            funcionario_desejado.mostrar_informacoes_com_indice(indice)
-        else:
-            print(f"Índice {indice}: Funcionário(a) {funcionario_desejado.nome} não possui o atributo 'salario'.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Função para definir o atributo 'salario'
-def definir_atributo_salario(indice, novo_salario):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        funcionario_desejado.salario = novo_salario
-        print(f"Salário do funcionário no índice {indice} foi definido como {novo_salario:.2f}.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
+# Segunda parte: Atualizar salário e cargo de um funcionário
+def atualizar_salario_e_cargo():
+    # Solicitar ao usuário um número de índice
+    indice_desejado = int(input("\nInsira o número de índice do funcionário para atualizar: \n"))
+    
+    # Verificar se o índice é válido
+    if indice_desejado >= 1 and indice_desejado <= len(lst_funcionarios):
+        funcionario_desejado = lst_funcionarios[indice_desejado - 1]
         
+        # Solicitar o novo salário
+        novo_salario = float(input("Insira o novo salário: "))
+        funcionario_desejado.atualizar_salario(novo_salario)
         
-# Função para verificar se o atributo 'cargo' existe
-def verificar_atributo_cargo(indice):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        if hasattr(funcionario_desejado, "cargo"):
-            print(f"Funcionário no índice {indice} tem o atributo 'cargo'.")
-        else:
-            print(f"Funcionário no índice {indice} não tem o atributo 'cargo'.")
+        # Solicitar o novo cargo
+        novo_cargo = input("Insira o novo cargo: ")
+        funcionario_desejado.atualizar_cargo(novo_cargo)
+        
+        # Imprimir informações atualizadas
+        funcionario_desejado.mostrar_informacoes_com_indice(indice_desejado)
+        
+        # Salvar as informações atualizadas no arquivo original
+        with open('csv_func.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=';')
+            
+            # Escrever o cabeçalho
+            csv_writer.writerow(['Nome', 'Cargo', 'Salario'])
+            
+            # Escrever as informações dos funcionários
+            for funcionario in lst_funcionarios:
+                csv_writer.writerow([funcionario.nome, funcionario.cargo, funcionario.salario])
+        
+        print("As informações foram salvas no arquivo CSV original.")
     else:
-        print(f"Índice {indice} fora do intervalo válido.")
+        print(f"Índice {indice_desejado} fora do intervalo válido.")
 
-# Função para definir o atributo 'cargo'
-def definir_atributo_cargo(indice, novo_cargo):
-    if indice >= 1 and indice <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice - 1]
-        funcionario_desejado.cargo = novo_cargo
-        print(f"Cargo do funcionário no índice {indice} foi definido como '{novo_cargo}'.")
-    else:
-        print(f"Índice {indice} fora do intervalo válido.")
-
-# Chamar as funções para testar os atributos
-indice_desejado = int(input("Insira o número de índice do funcionário desejado: "))
-
-exibir_dados_completos(indice_desejado)
-
-verificar_atributo_nome(indice_desejado)
-verificar_atributo_salario(indice_desejado)
-verificar_atributo_cargo(indice_desejado)
-
-novo_salario = float(input("Insira o novo salário: "))
-definir_atributo_salario(indice_desejado, novo_salario)
-
-novo_cargo = input("Insira o novo cargo: ")
-definir_atributo_cargo(indice_desejado, novo_cargo)
-
-verificar_valor_atributo_salario(indice_desejado)
-verificar_atributo_cargo(indice_desejado)
-
-#excluir_atributo_salario(indice_desejado)
-exibir_dados_completos(indice_desejado)
-verificar_atributo_salario(indice_desejado)
+# Chamar a função para atualizar salário e cargo de um funcionário
+atualizar_salario_e_cargo()
