@@ -47,19 +47,9 @@ with open('csv_func.csv', newline='', encoding='utf-8') as csv_file:
         # Criando um objeto da classe ClsFuncionario com base nos valores e adicionando à lista
         funcionario = ClsFuncionario(nome, cargo, salario)
         lst_funcionarios.append(funcionario)
-
-# Função para obter informações de um funcionário com base no índice inserido pelo usuário
-def obter_funcionario_por_indice():
-    # Solicitar ao usuário um número de índice
-    indice_desejado = int(input("\nInsira o número de índice do funcionário desejado: \n"))
-    
-    # Verificar se o índice é válido
-    if indice_desejado >= 1 and indice_desejado <= len(lst_funcionarios):
-        funcionario_desejado = lst_funcionarios[indice_desejado - 1]
-        # Imprimir as informações do funcionário com índice
-        funcionario_desejado.mostrar_informacoes_com_indice(indice_desejado)
-    else:
-        print(f"Índice {indice_desejado} fora do intervalo válido.")
+        
+        
+        
 
 # Imprimindo informações sobre os funcionários usando o método mostrar_informacoes com índice
 for indice, funcionario in enumerate(lst_funcionarios):
@@ -67,9 +57,7 @@ for indice, funcionario in enumerate(lst_funcionarios):
     indice += 1
     funcionario.mostrar_informacoes_com_indice(indice)
 
-# Chamar a função para obter um funcionário por índice
-obter_funcionario_por_indice()
-
+    
 # Calculando estatísticas de salários
 salarios = [funcionario.salario for funcionario in lst_funcionarios]
 salario_minimo = locale.currency(min(salarios), grouping=True)
@@ -107,42 +95,65 @@ print("\nOs 10 menores salários:")
 for indice, funcionario in enumerate(top_10_menores_salarios):
     # Adiciona 1 ao índice para começar a contagem a partir de 1 em vez de 0
     indice += 1
-    funcionario.mostrar_informacoes_com_indice(indice)
+    funcionario.mostrar_informacoes_com_indice(indice)    
 
-# Segunda parte: Atualizar salário e cargo de um funcionário
-def atualizar_salario_e_cargo():
-    # Solicitar ao usuário um número de índice
-    indice_desejado = int(input("\nInsira o número de índice do funcionário para atualizar: \n"))
-    
+# Função para obter informações de um funcionário com base no índice inserido pelo usuário
+def obter_funcionario_por_indice(indice_desejado):
     # Verificar se o índice é válido
     if indice_desejado >= 1 and indice_desejado <= len(lst_funcionarios):
         funcionario_desejado = lst_funcionarios[indice_desejado - 1]
-        
+        # Imprimir as informações do funcionário com índice
+        funcionario_desejado.mostrar_informacoes_com_indice(indice_desejado)
+        return funcionario_desejado
+    else:
+        print(f"Índice {indice_desejado} fora do intervalo válido.")
+        return None
+
+# Função para atualizar o salário e o cargo de um funcionário
+def atualizar_salario_e_cargo(funcionario):
+    if funcionario:
         # Solicitar o novo salário
         novo_salario = float(input("Insira o novo salário: "))
-        funcionario_desejado.atualizar_salario(novo_salario)
-        
+        funcionario.atualizar_salario(novo_salario)
+
         # Solicitar o novo cargo
-        novo_cargo = input("Insira o novo cargo: ")
-        funcionario_desejado.atualizar_cargo(novo_cargo)
-        
+        novo_cargo = input("Insira o novo cargo: ").upper()
+        funcionario.atualizar_cargo(novo_cargo)
+
         # Imprimir informações atualizadas
-        funcionario_desejado.mostrar_informacoes_com_indice(indice_desejado)
-        
+        funcionario.mostrar_informacoes_com_indice(lst_funcionarios.index(funcionario) + 1)
+
         # Salvar as informações atualizadas no arquivo original
         with open('csv_func.csv', mode='w', newline='', encoding='utf-8') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=';')
-            
+
             # Escrever o cabeçalho
             csv_writer.writerow(['Nome', 'Cargo', 'Salario'])
-            
+
             # Escrever as informações dos funcionários
-            for funcionario in lst_funcionarios:
-                csv_writer.writerow([funcionario.nome, funcionario.cargo, funcionario.salario])
-        
+            for func in lst_funcionarios:
+                csv_writer.writerow([func.nome, func.cargo, func.salario])
+
         print("As informações foram salvas no arquivo CSV original.")
     else:
-        print(f"Índice {indice_desejado} fora do intervalo válido.")
+        print("Funcionário não encontrado.")
 
-# Chamar a função para atualizar salário e cargo de um funcionário
-atualizar_salario_e_cargo()
+# Loop principal com o menu de opções
+while True:
+    print("\nMENU DE OPÇÕES:")
+    print("0 - SAIR")
+    print("1 - ATUALIZAR INFORMAÇÕES SOBRE FUNCIONÁRIO")
+
+    escolha = input("Escolha uma opção: ")
+
+    if escolha == '0':
+        # Opção 0: SAIR
+        print("Saindo do programa.")
+        break
+    elif escolha == '1':
+        # Opção 1: ATUALIZAR INFORMAÇÕES SOBRE FUNCIONÁRIO
+        indice_desejado = int(input("\nInsira o número de índice do funcionário para atualizar: "))
+        funcionario_desejado = obter_funcionario_por_indice(indice_desejado)
+        atualizar_salario_e_cargo(funcionario_desejado)
+    else:
+        print("Opção inválida. Escolha novamente.")
